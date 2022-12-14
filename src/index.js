@@ -1,11 +1,14 @@
 import Notiflix from 'notiflix';
-import { fetchQuery } from './js/fetchitems';
+import PicturesAPIService from './js/fetchitems';
 
 const refs = {
   input: document.querySelector('input[name="searchQuery"]'),
   button: document.querySelector('button[name="searchButton"]'),
   gallery: document.querySelector('.gallery'),
+  loadMoreButton: document.querySelector('.load-more'),
 };
+
+const picturesAPIService = new PicturesAPIService();
 
 const renderImgsList = imgsArray => {
   const markupImgsList = imgsArray
@@ -48,14 +51,16 @@ const renderImgsList = imgsArray => {
 };
 
 const clearMarkup = () => {
+  refs.loadMoreButton.classList.add('visually-hidden');
   refs.gallery.innerHTML = '';
 };
 
 const handleSearch = e => {
   e.preventDefault();
-  clearMarkup();
-  const queryValue = refs.input.value.trim();
-  fetchQuery(queryValue).then(({ totalHits, hits, total }) => {
+
+  picturesAPIService.query = refs.input.value.trim();
+  picturesAPIService.resetPage();
+  picturesAPIService.fetchQuery().then(({ totalHits, hits }) => {
     if (hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
@@ -65,8 +70,17 @@ const handleSearch = e => {
     }
 
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    clearMarkup();
     renderImgsList(hits);
+    if (refs.loadMoreButton.classList.contains('visually-hidden')) {
+      refs.loadMoreButton.classList.remove('visually-hidden');
+    }
   });
 };
 
+const onLoadMore = () => {
+  picturesAPIService.fetchQuery().then(({ hits }) => renderImgsList(hits));
+};
+
 refs.button.addEventListener('click', handleSearch);
+refs.loadMoreButton.addEventListener('click', onLoadMore);

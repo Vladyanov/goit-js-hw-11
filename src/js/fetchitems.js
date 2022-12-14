@@ -3,13 +3,32 @@ import axios from 'axios';
 const URL = 'https://pixabay.com/api/';
 const KEY = '32003639-db0e7b4889ce58836b14df3bc';
 
-export default class picturesAPIService {
-  constructor() {}
+export default class PicturesAPIService {
+  constructor() {
+    this.searchQuery = '';
+    this.page = 1;
+  }
+
+  fetchQuery() {
+    return axios
+      .get(
+        `${URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`
+      )
+      .then(({ data }) => {
+        this.page += 1;
+        return data;
+      });
+  }
+
+  resetPage() {
+    this.page = 1;
+  }
+
+  get query() {
+    return this.searchQuery;
+  }
+
+  set query(newQuery) {
+    this.searchQuery = newQuery;
+  }
 }
-const fetchQuery = (value, page) => {
-  return axios
-    .get(
-      `${URL}?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40`
-    )
-    .then(({ data }) => data);
-};
