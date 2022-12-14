@@ -59,6 +59,10 @@ const handleSearch = e => {
   e.preventDefault();
 
   picturesAPIService.query = refs.input.value.trim();
+  if (picturesAPIService.query === '') {
+    return Notiflix.Notify.failure('Enter something...');
+  }
+
   picturesAPIService.resetPage();
   picturesAPIService.fetchQuery().then(({ totalHits, hits }) => {
     if (hits.length === 0) {
