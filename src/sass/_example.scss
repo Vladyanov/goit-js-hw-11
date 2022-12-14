@@ -1,4 +1,5 @@
 .search-form {
+  margin-bottom: 10px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -41,4 +42,57 @@ button[name='searchButton'] {
   &:focus {
     background-color: #0fb1e7e2;
   }
+}
+
+body {
+  min-width: 100%;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.photo-card {
+  border: 1px solid rgb(210, 210, 210);
+  border-radius: 6px;
+  flex-basis: calc((100% - 30px) / 4);
+
+  &:hover {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.gallery__link {
+  display: block;
+  overflow: hidden;
+  height: 240px;
+  width: 100%;
+}
+
+.gallery__image {
+  height: 100%;
+  width: 100%;
+  transition: transform 400ms ease-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.info {
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 5%;
+}
+
+.info-item {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  line-height: 1.5;
 }
