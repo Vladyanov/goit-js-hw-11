@@ -60,10 +60,14 @@ const hitsEnd = hitsValue => {
     (picturesAPIService.page - 1) * picturesAPIService.perPage;
 
   if (hitsValue <= picturesShownCount) {
-    Notiflix.Notify.info(
-      "We're sorry, but you've reached the end of search results."
-    );
     refs.loadMoreButton.classList.add('visually-hidden');
+    console.log(hitsValue, picturesAPIService.perPage);
+    if (hitsValue > picturesAPIService.perPage) {
+      console.log(picturesAPIService.page);
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
   }
 };
 
@@ -72,7 +76,7 @@ const handleSearch = e => {
 
   picturesAPIService.query = refs.input.value.trim();
   if (picturesAPIService.query === '') {
-    return Notiflix.Notify.failure('Enter something...');
+    return Notiflix.Notify.failure('Please, enter something...');
   }
 
   picturesAPIService.resetPage();
