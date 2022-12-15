@@ -102,6 +102,14 @@ const onLoadMore = () => {
     hitsEnd(totalHits);
     renderImgsList(hits);
   });
+
+  const { height: cardHeight } =
+    refs.gallery.firstElementChild.getBoundingClientRect();
+  console.log(cardHeight);
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 };
 
 refs.button.addEventListener('click', handleSearch);
