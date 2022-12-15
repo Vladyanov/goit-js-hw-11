@@ -55,6 +55,18 @@ const clearMarkup = () => {
   refs.gallery.innerHTML = '';
 };
 
+const hitsEnd = hitsValue => {
+  const picturesShownCount =
+    (picturesAPIService.page - 1) * picturesAPIService.perPage;
+
+  if (hitsValue <= picturesShownCount) {
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+    refs.loadMoreButton.classList.add('visually-hidden');
+  }
+};
+
 const handleSearch = e => {
   e.preventDefault();
 
@@ -76,14 +88,16 @@ const handleSearch = e => {
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
     clearMarkup();
     renderImgsList(hits);
-    if (refs.loadMoreButton.classList.contains('visually-hidden')) {
-      refs.loadMoreButton.classList.remove('visually-hidden');
-    }
+    refs.loadMoreButton.classList.remove('visually-hidden');
+    hitsEnd(totalHits);
   });
 };
 
 const onLoadMore = () => {
-  picturesAPIService.fetchQuery().then(({ hits }) => renderImgsList(hits));
+  picturesAPIService.fetchQuery().then(({ hits, totalHits }) => {
+    hitsEnd(totalHits);
+    renderImgsList(hits);
+  });
 };
 
 refs.button.addEventListener('click', handleSearch);
